@@ -31,6 +31,7 @@ async function run() {
         const dataBaseOfAddToy = client.db("funcar").collection("addToy");
 
 
+
         /*SUB CATEGORY*/
         app.get('/category/:text', async (req, res) => {
 
@@ -46,6 +47,7 @@ async function run() {
         })
 
 
+
         /* MY TOY */
 
         app.get('/mytoy', async (req, res) => {
@@ -53,9 +55,8 @@ async function run() {
             console.log(req.query);
 
             let query = {}
-            if (req.query?.sellerEmail) 
-            {
-                query = { sellerEmail : req.query.sellerEmail }
+            if (req.query?.sellerEmail) {
+                query = { sellerEmail: req.query.sellerEmail }
             }
             const result = await dataBaseOfAddToy.find(query).toArray();
             res.send(result);
@@ -65,10 +66,10 @@ async function run() {
 
         /*MY TOY DELETE*/
 
-        app.delete('/mytoy/:id' , async(req, res) => {
-            
+        app.delete('/mytoy/:id', async (req, res) => {
+
             const id = req.params.id;
-            const query = {_id : new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await dataBaseOfAddToy.deleteOne(query);
             res.send(result);
 
@@ -76,21 +77,41 @@ async function run() {
 
 
         /*UPDATE TOY INFO*/
-        
-        app.get('/mytoy/:id' , async(req, res) => {
-            
+
+        app.get('/mytoy/:id', async (req, res) => {
+
             const id = req.params.id;
-            const query = {_id : new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await dataBaseOfAddToy.findOne(query);
             res.send(result);
 
         })
 
 
+        /*PUT*/
 
-        app.patch('/mytoy/:id' , async(req, res) => {
+        app.put('/mytoy/:id', async (req, res) => {
 
-            const update = req.body;
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updated = req.body;
+
+            console.log(id, updated);
+
+
+            const toyUpdated = {
+
+                $set: {
+
+                    price: updated.price,
+                    quantity: updated.quantity,
+                    details: updated.details,
+                },
+            };
+            const result = await dataBaseOfAddToy.updateOne(query, toyUpdated, options);
+            res.send(result);
+            console.log(result);
         })
 
 
@@ -103,6 +124,18 @@ async function run() {
             const add = req.body;
             console.log(add);
             const result = await dataBaseOfAddToy.insertOne(add)
+            res.send(result);
+
+        })
+
+
+        /*Details OF ALL TOY*/
+
+        app.get('/alltoys/:id', async (req, res) => {
+
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await dataBaseOfAddToy.findOne(query);
             res.send(result);
 
         })
