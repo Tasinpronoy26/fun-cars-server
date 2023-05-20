@@ -30,7 +30,7 @@ async function run() {
         const dataBaseOfCategory = client.db("funcar").collection("carCategory");
         const dataBaseOfAddToy = client.db("funcar").collection("addToy");
 
-        
+
         /*SUB CATEGORY*/
         app.get('/category/:text', async (req, res) => {
 
@@ -45,7 +45,38 @@ async function run() {
 
         })
 
-        
+
+        /* MY TOY */
+
+        app.get('/mytoy', async (req, res) => {
+
+            console.log(req.query);
+
+            let query = {}
+            if (req.query?.sellerEmail) 
+            {
+                query = { sellerEmail : req.query.sellerEmail }
+            }
+            const result = await dataBaseOfAddToy.find(query).toArray();
+            res.send(result);
+        })
+
+
+
+        /*MY TOY DELETE*/
+
+        app.delete('/mytoy/:id' , async(req, res) => {
+            
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)}
+            const result = await dataBaseOfAddToy.deleteOne(query);
+            res.send(result);
+
+        })
+
+
+
+
         /*ADD TOY*/
 
         app.post('/addtoy', async (req, res) => {
