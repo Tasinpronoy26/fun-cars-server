@@ -75,6 +75,25 @@ async function run() {
         })
 
 
+        /*UPDATE TOY INFO*/
+        
+        app.get('/mytoy/:id' , async(req, res) => {
+            
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)}
+            const result = await dataBaseOfAddToy.findOne(query);
+            res.send(result);
+
+        })
+
+
+
+        app.patch('/mytoy/:id' , async(req, res) => {
+
+            const update = req.body;
+        })
+
+
 
 
         /*ADD TOY*/
