@@ -47,6 +47,29 @@ async function run() {
         })
 
 
+        // app.get('/category/:id', async (req, res) => {
+
+             
+        //         const id = req.params.id    
+                
+        //         const query = {_id : new ObjectId(id)}
+
+        //         const options = {
+
+        //             projection: { toys: 1 }
+        //         }
+
+        //         const cursor = dataBaseOfCategory.find(query,options);
+        //         const result = await cursor.toArray();
+        //         return res.send(result)
+             
+
+        // })
+
+
+
+
+
 
         /* MY TOY */
 
@@ -134,7 +157,9 @@ async function run() {
         app.get('/alltoys/:id', async (req, res) => {
 
             const id = req.params.id;
-            const query = { _id: new ObjectId(id) }
+            const search = req.query.search;
+            console.log(search);
+            const query = { _id: new ObjectId(id)};
             const result = await dataBaseOfAddToy.findOne(query);
             res.send(result);
 
